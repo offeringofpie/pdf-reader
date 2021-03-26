@@ -1,0 +1,9 @@
+{
+  "include": ["src", "prerender.js"],
+  "exclude": ["node_modules/*"],
+  "compilerOptions": {
+    "target": "es2019",
+    "types": ["svelte"],
+    "moduleResolution": "node"
+  }
+}

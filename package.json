@@ -1,0 +1,48 @@
+{
+  "name": "svelte-tailwindcss",
+  "description": "Svelte with Tailwind, Snowpack and prerendering",
+  "version": "0.0.1",
+  "author": {
+    "name": "J Lopes",
+    "email": "mail@jlopes.eu",
+    "web": "https://jlopes.eu"
+  },
+  "scripts": {
+    "start": "snowpack dev --port 4000",
+    "prerender": "node prerender.js",
+    "build": "npm run prerender && snowpack build",
+    "serve": "sirv build -p 4000"
+  },
+  "dependencies": {
+    "postcss-nested": "^5.0.5",
+    "svelte": "^3.30.0",
+    "tailwindcss": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.13.0",
+    "@snowpack/app-scripts-svelte": "^2.0.0",
+    "@snowpack/plugin-babel": "^2.1.6",
+    "@snowpack/plugin-build-script": "^2.1.0",
+    "@snowpack/plugin-dotenv": "^2.0.4",
+    "@snowpack/plugin-postcss": "^1.2.1",
+    "@snowpack/plugin-svelte": "^3.3.0",
+    "@snowpack/plugin-webpack": "^2.3.1",
+    "@snowpack/web-test-runner-plugin": "^0.2.1",
+    "autoprefixer": "^10.0.4",
+    "postcss": "^8.2.8",
+    "postcss-cli": "^8.3.1",
+    "postcss-load-config": "^3.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.2.1",
+    "prettier-plugin-svelte": "^2.1.4",
+    "sirv-cli": "^1.0.11",
+    "snowpack": "^3.0.11",
+    "svelte-preprocess": "^4.1.1",
+    "typescript": "^4.2.3"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-typescript"
+    ]
+  }
+}
