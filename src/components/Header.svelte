@@ -14,6 +14,7 @@
 
 	img {
 		@apply mb-10;
+		@apply animate-pulse;
 	}
 </style>
 
