@@ -1,6 +1,13 @@
 <script>
-	const message = 'Learn Svelte';
+  const message = 'Learn Svelte';
 </script>
+
+<footer>
+  <a href="https://svelte.dev" target="_blank" rel="noopener noreferrer">
+    {message}
+  </a>
+</footer>
+
 <style>
   footer {
     @apply h-10;
@@ -15,12 +22,3 @@
     @apply text-yellow-700;
   }
 </style>
-<footer>
-  <a
-    href="https://svelte.dev"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    {message}
-  </a>
-</footer>
