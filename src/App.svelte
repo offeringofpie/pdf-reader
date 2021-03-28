@@ -1,5 +1,6 @@
 <script>
   import Header from './components/Header.svelte';
+  import Reader from './components/Reader.svelte';
   import Footer from './components/Footer.svelte';
 </script>
 
@@ -13,5 +14,6 @@
 
 <slot>
   <Header />
+  <Reader />
   <Footer />
 </slot>

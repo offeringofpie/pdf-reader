@@ -2,13 +2,12 @@
 </script>
 
 <header>
-  <img src="/logo.svg" alt="" />
   <p>
     Edit <code>src/App.svelte</code> and save to reload.
   </p>
 </header>
 
-<header>
+<style>
   header {
     @apply flex;
     @apply justify-center;
@@ -23,4 +22,4 @@
     @apply mb-10;
     @apply animate-pulse;
   }
-</header>
+</style>
