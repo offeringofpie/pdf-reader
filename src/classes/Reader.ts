@@ -7,7 +7,6 @@ import {
   scale,
 } from '../store.js';
 import pdfjs from 'pdfjs-dist/build/pdf';
-import { TextLayerBuilder, EventBus } from 'pdfjs-dist/web/pdf_viewer';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -24,6 +23,7 @@ export default class Reader {
   ctx: any;
   next: Function;
   prev: Function;
+  open: Function;
 
   constructor() {
     this.canvas = null;
@@ -41,6 +41,7 @@ export default class Reader {
 
     this.next = this.onNextPage.bind(this);
     this.prev = this.onPrevPage.bind(this);
+    this.open = this.openFile.bind(this);
     this.zoomIn = this.zoomIn.bind(this);
     this.zoomOut = this.zoomOut.bind(this);
   }
@@ -56,83 +57,90 @@ export default class Reader {
 
   init() {
     this.subscribe();
-    pdfjs.getDocument('/doc.pdf').promise.then((pdfDoc_) => {
-      doc.update((val) => pdfDoc_);
-      numPages.update((val) => pdfDoc_.numPages);
-      pageNum.update((val) => 1);
-      // this.doc = pdfDoc_;
-      // this.numPages = pdfDoc_.numPages;
-      // store.set({
-      //   ...store,
-      //   pageNum: 1,
-      //   numPages: pdfDoc_.numPages,
-      //   doc: pdfDoc_,
-      // });
+  }
 
-      this.renderPage(this.pageNum);
-    });
+  openFile(file) {
+    const fileReader = new FileReader();
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onload = (e) => {
+      let result = fileReader.result as ArrayBufferLike;
+      const arrayDoc = new Uint8Array(result);
+
+      pdfjs.getDocument(arrayDoc).promise.then((pdfDoc_) => {
+        doc.update((val) => pdfDoc_);
+        numPages.update((val) => pdfDoc_.numPages);
+        pageNum.update((val) => 1);
+
+        this.renderPage(this.pageNum);
+      });
+    };
   }
 
   renderPage(num) {
-    this.pageRendering = true;
+    if (this.doc) {
+      this.pageRendering = true;
 
-    this.doc.getPage(num).then((page) => {
-      let viewport = page.getViewport({ scale: this.scale });
-      // page.getTextContent().then(function (textContent) {
-      //   // building SVG and adding that to the DOM
-      //   const svg = buildSVG(viewport, textContent);
-      //   console.log(svg);
-      //   this.svg = svg;
-      //   container.appendChild(svg);
-      // });
-      this.canvas.height = viewport.height;
-      this.canvas.width = viewport.width;
-      this.ctx = this.canvas.getContext('2d');
+      this.doc.getPage(num).then((page) => {
+        let viewport = page.getViewport({ scale: this.scale });
+        // page.getTextContent().then(function (textContent) {
+        //   // building SVG and adding that to the DOM
+        //   const svg = buildSVG(viewport, textContent);
+        //   console.log(svg);
+        //   this.svg = svg;
+        //   container.appendChild(svg);
+        // });
+        this.canvas.height = viewport.height;
+        this.canvas.width = viewport.width;
+        this.ctx = this.canvas.getContext('2d');
 
-      page
-        .render({
-          canvasContext: this.ctx,
-          viewport: viewport,
-        })
-        .promise.then(() => {
-          this.pageRendering = false;
-          if (this.pageNumPending !== null) {
-            this.renderPage(this.pageNumPending);
-            this.pageNumPending = null;
-          }
-          return page.getTextContent();
-        })
-        .then((textContent) => {
-          const tempContentArray = [];
-          textContent.items.forEach((item) => {
-            tempContentArray.push(item.str);
+        page
+          .render({
+            canvasContext: this.ctx,
+            viewport: viewport,
+          })
+          .promise.then(() => {
+            this.pageRendering = false;
+            if (this.pageNumPending !== null) {
+              this.renderPage(this.pageNumPending);
+              this.pageNumPending = null;
+            }
+            return page.getTextContent();
+          })
+          .then((textContent) => {
+            const tempContentArray = [];
+            if (textContent.items.length) {
+              textContent.items.forEach((item) => {
+                tempContentArray.push(item.str);
+              });
+            }
+            pageContent.update((val) => tempContentArray);
+
+            // console.log(textContent);
+            // textContainer.innerHTML = '';
+            // textContent.items.forEach((item) => {
+            //   const itemElement = document.createElement('span');
+            //   itemElement.setAttribute('data-height', item.height);
+            //   itemElement.setAttribute('data-width', item.width);
+            //   itemElement.setAttribute(
+            //     'data-transform',
+            //     item.transform.toString()
+            //   );
+            //   itemElement.innerHTML = item.str;
+            //   textContainer.appendChild(itemElement);
+            // });
+            // var textLayer = new TextLayerBuilder({
+            //   textLayerDiv: textContainer,
+            //   eventBus: new EventBus(),
+            //   pageIndex: page.pageIndex,
+            //   viewport: viewport,
+            // });
+            // textLayer.setTextContent(textContent);
+            // textLayer.render();
           });
-          pageContent.update((val) => tempContentArray);
-          // console.log(textContent);
-          // textContainer.innerHTML = '';
-          // textContent.items.forEach((item) => {
-          //   const itemElement = document.createElement('span');
-          //   itemElement.setAttribute('data-height', item.height);
-          //   itemElement.setAttribute('data-width', item.width);
-          //   itemElement.setAttribute(
-          //     'data-transform',
-          //     item.transform.toString()
-          //   );
-          //   itemElement.innerHTML = item.str;
-          //   textContainer.appendChild(itemElement);
-          // });
-          // var textLayer = new TextLayerBuilder({
-          //   textLayerDiv: textContainer,
-          //   eventBus: new EventBus(),
-          //   pageIndex: page.pageIndex,
-          //   viewport: viewport,
-          // });
-          // textLayer.setTextContent(textContent);
-          // textLayer.render();
-        });
-    });
+      });
 
-    this.pageNum = num;
+      this.pageNum = num;
+    }
   }
 
   getNumPages() {
@@ -179,4 +187,36 @@ export default class Reader {
       this.renderPage(this.pageNum);
     }
   }
+
+  // function buildSVG(viewport, textContent) {
+  //   // Building SVG with size of the viewport (for simplicity)
+  //   const svg = document.createElementNS(
+  //     'http://www.w3.org/2000/svg',
+  //     'svg:svg'
+  //   );
+  //   svg.setAttribute('width', viewport.width + 'px');
+  //   svg.setAttribute('height', viewport.height + 'px');
+  //   // items are transformed to have 1px font size
+  //   svg.setAttribute('font-size', 1);
+
+  //   // processing all items
+  //   textContent.items.forEach(function (textItem) {
+  //     // we have to take in account viewport transform, which includes scale,
+  //     // rotation and Y-axis flip, and not forgetting to flip text.
+  //     const tx = pdfjs.Util.transform(
+  //       pdfjs.Util.transform(viewport.transform, textItem.transform),
+  //       [1, 0, 0, -1, 0, 0]
+  //     );
+  //     const style = textContent.styles[textItem.fontName];
+  //     // adding text element
+  //     const text = document.createElementNS(
+  //       'http://www.w3.org/2000/svg',
+  //       'svg:text'
+  //     );
+  //     text.setAttribute('transform', 'matrix(' + tx.join(' ') + ')');
+  //     text.textContent = textItem.str;
+  //     svg.appendChild(text);
+  //   });
+  //   return svg;
+  // }
 }

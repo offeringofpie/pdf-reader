@@ -9,6 +9,7 @@ export const voice = writable(storedVoice);
 export const canvas = writable(null);
 export const doc = writable(0);
 export const pageContent = writable([]);
+export const fileInput = writable(null);
 export const pageNum = writable(1);
 export const numPages = writable(1);
 export const scale = writable(1);

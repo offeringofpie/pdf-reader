@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { pageContent, rate, voice } from '../store.js';
+  import { doc, pageContent, rate, voice } from '../store.js';
   import Button from './Button.svelte';
 
   let playing = false;
@@ -39,19 +39,21 @@
   }
 </script>
 
-<footer class="fixed right-3 bottom-3 inline-flex">
-  <Button
-    icon={playing ? 'pause' : 'play'}
-    size="10"
-    onclick={speak}
-    className={`shadow-lg rounded-l-md ${
-      playing ? 'bg-gray-700' : 'bg-gray-600'
-    } hover:bg-gray-700 p-3 z-10`}
-  />
-  <Button
-    icon="stop"
-    size="10"
-    onclick={stop}
-    className="shadow-lg rounded-r-md bg-gray-600 hover:bg-gray-700 p-3 z-10"
-  />
-</footer>
+{#if $pageContent.length}
+  <footer class="fixed right-3 bottom-3 inline-flex">
+    <Button
+      icon={playing ? 'pause' : 'play'}
+      size="10"
+      onclick={speak}
+      className={`shadow-lg rounded-l-md ${
+        playing ? 'bg-gray-700' : 'bg-gray-600'
+      } hover:bg-gray-700 p-3 z-10`}
+    />
+    <Button
+      icon="stop"
+      size="10"
+      onclick={stop}
+      className="shadow-lg rounded-r-md bg-gray-600 hover:bg-gray-700 p-3 z-10"
+    />
+  </footer>
+{/if}

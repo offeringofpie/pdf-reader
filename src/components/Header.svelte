@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { doc, pageNum, numPages } from '../store.js';
+  import { doc, pageNum, numPages, fileInput } from '../store.js';
   import Button from './Button.svelte';
   import Settings from './Settings.svelte';
   let settings_show = false;
@@ -10,15 +10,45 @@
   export let zoomIn;
   export let zoomOut;
 
+  function selectFile() {
+    $fileInput.click();
+  }
+
+  function handleKeydown(ev) {
+    switch (ev.keyCode) {
+      case 37: //right
+        prev();
+        break;
+      case 39: //left
+        next();
+        break;
+      case 61: // +
+        zoomIn();
+        break;
+      case 173: // -
+        zoomOut();
+        break;
+      case 79: // o
+        selectFile();
+        break;
+      case 191: // ?
+        settings_show = !settings_show;
+        break;
+      default:
+        break;
+    }
+  }
+
   onMount(() => {});
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <header
   class="fixed flex top-0 w-full justify-between items-center flex-row text-center shadow-lg bg-gray-600 text-gray-400 p-5 z-10"
 >
   <nav>
-    <input type="file" class="hidden" />
-    <Button icon="folder" />
+    <Button icon="folder" onclick={selectFile} />
   </nav>
   {#if $doc}
     <div class="flex">
