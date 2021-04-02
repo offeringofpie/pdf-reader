@@ -1,10 +1,11 @@
-const { existsSync, promises } = require('fs');
-const { join } = require('path');
 require('svelte/register')({
   cssHash: ({ hash, css, name, filename }) => {
     return `${hash(css)}`;
   },
 });
+
+const { existsSync, promises } = require('fs');
+const { join } = require('path');
 
 const App = require('./src/App.svelte').default;
 

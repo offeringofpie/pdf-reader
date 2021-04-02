@@ -8,19 +8,20 @@
     "web": "https://jlopes.eu"
   },
   "scripts": {
-    "start": "snowpack dev --port 4000",
+    "start": "snowpack dev --port 3000",
     "prerender": "node prerender.js",
-    "build": "npm run prerender && snowpack build",
-    "serve": "sirv build -p 4000"
+    "build": "snowpack build",
+    "serve": "sirv build -p 3000"
   },
   "dependencies": {
     "pdfjs-dist": "^2.6.347",
-    "postcss-nested": "^5.0.5",
     "svelte": "^3.30.0",
     "tailwindcss": "^2.0.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.13.12",
     "@babel/preset-typescript": "^7.13.0",
+    "@martinse/svelte-heroicons": "^0.1.4",
     "@snowpack/app-scripts-svelte": "^2.0.0",
     "@snowpack/plugin-babel": "^2.1.6",
     "@snowpack/plugin-build-script": "^2.1.0",
@@ -33,6 +34,7 @@
     "postcss": "^8.2.8",
     "postcss-cli": "^8.3.1",
     "postcss-load-config": "^3.0.1",
+    "postcss-nested": "^5.0.5",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.4",

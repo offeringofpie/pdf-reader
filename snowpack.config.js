@@ -5,6 +5,10 @@ module.exports = {
     // Mount "public" to the root URL path ("/*") and serve files with zero transformations
     public: { url: '/' },
   },
+  buildOptions: {
+    clean: true,
+    out: 'dist',
+  },
   plugins: [
     [
       '@snowpack/plugin-build-script',
@@ -32,7 +36,8 @@ module.exports = {
   buildOptions: {},
   alias: {},
   optimize: {
-    bundle: true,
+    bundle: false,
+    treeshake: true,
     minify: true,
     manifest: true,
     sourcemap: false,
