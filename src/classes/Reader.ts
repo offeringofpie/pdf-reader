@@ -1,5 +1,13 @@
 import { get } from 'svelte/store';
-import { doc, textElem, canvas, pageNum, numPages, scale } from '../store.js';
+import {
+  doc,
+  textElem,
+  pageContent,
+  canvas,
+  pageNum,
+  numPages,
+  scale,
+} from '../store.js';
 import pdfjs from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import { TextLayerBuilder, EventBus } from 'pdfjs-dist/web/pdf_viewer';
@@ -103,6 +111,9 @@ export default class Reader {
           })
           .then((textContent) => {
             let canvasOffset = this.canvas.getBoundingClientRect();
+            pageContent.update((val) =>
+              textContent.items.length ? textContent : null
+            );
             this.textElem.innerHTML = '';
             this.textElem.setAttribute(
               'style',

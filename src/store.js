@@ -9,6 +9,7 @@ export const scale = writable(1);
 
 export const canvas = writable(null);
 export const doc = writable(0);
+export const pageContent = writable(null);
 export const fileInput = writable(null);
 export const textElem = writable(null);
 export const pageNum = writable(1);

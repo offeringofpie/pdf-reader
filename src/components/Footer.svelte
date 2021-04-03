@@ -39,7 +39,7 @@
   }
 </script>
 
-{#if $pageContent.length}
+{#if $pageContent}
   <footer class="fixed right-3 bottom-3 inline-flex">
     <Button
       icon={playing ? 'pause' : 'play'}
