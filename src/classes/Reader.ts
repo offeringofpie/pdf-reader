@@ -1,13 +1,5 @@
 import { get } from 'svelte/store';
-import {
-  doc,
-  textElem,
-  pageContent,
-  canvas,
-  pageNum,
-  numPages,
-  scale,
-} from '../store.js';
+import { doc, textElem, canvas, pageNum, numPages, scale } from '../store.js';
 import pdfjs from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import { TextLayerBuilder, EventBus } from 'pdfjs-dist/web/pdf_viewer';
@@ -20,7 +12,6 @@ export default class Reader {
   svg: any;
   pageNum: number;
   numPages: any;
-  pageContent: Array<string>;
   pageRendering: Boolean;
   pageNumPending: any;
   scale: number;
@@ -37,7 +28,6 @@ export default class Reader {
     this.pageNum = 1;
     this.numPages = null;
     this.pageRendering = false;
-    this.pageContent = [];
     this.pageNumPending = null;
     this.scale = 1;
     this.ctx = null;
@@ -58,7 +48,6 @@ export default class Reader {
     numPages.subscribe((val) => (this.numPages = val));
     pageNum.subscribe((val) => (this.pageNum = val));
     scale.subscribe((val) => (this.scale = val));
-    pageContent.subscribe((val) => (this.pageContent = val));
   }
 
   init() {
@@ -113,31 +102,12 @@ export default class Reader {
             return page.getTextContent();
           })
           .then((textContent) => {
-            const tempContentArray = [];
-            if (textContent.items.length) {
-              textContent.items.forEach((item) => {
-                tempContentArray.push(item.str);
-              });
-            }
-
             let canvasOffset = this.canvas.getBoundingClientRect();
-            pageContent.update((val) => tempContentArray);
             this.textElem.innerHTML = '';
             this.textElem.setAttribute(
               'style',
               `left: ${canvasOffset.left}px; top: ${canvasOffset.top}px; height: ${viewport.height}px; width: ${viewport.width}px;`
             );
-            // textContent.items.forEach((item) => {
-            //   const itemElement = document.createElement('span');
-            //   itemElement.setAttribute('data-height', item.height);
-            //   itemElement.setAttribute('data-width', item.width);
-            //   itemElement.setAttribute(
-            //     'data-transform',
-            //     item.transform.toString()
-            //   );
-            //   itemElement.innerHTML = item.str;
-            //   this.textElem.appendChild(itemElement);
-            // });
             var textLayer = new TextLayerBuilder({
               textLayerDiv: this.textElem,
               eventBus: new EventBus(),
