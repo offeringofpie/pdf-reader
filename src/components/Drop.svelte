@@ -40,9 +40,9 @@
 </script>
 
 <label
-  class={`absolute h-full w-full mx-3 p-20 text-center transition-all ease-in-out duration-200 border-2 border-dashed border-transparent rounded-xl z-0 ${
-    dragging ? 'z-10 border-red-400' : ''
-  } ${$doc ? '' : 'cursor-pointer'} ${className}`}
+  class={`absolute h-full w-full mx-3 p-20 text-center transition-all ease-in-out duration-200 border-2 border-dashed border-transparent rounded-xl z-1 ${
+    dragging ? 'z-10 border-red-400 opacity-100' : ''
+  } ${$doc ? 'opacity-0' : 'cursor-pointer'} ${className}`}
   on:drop|preventDefault={onFile(getFilesFromDropEvent)}
 >
   <slot {dragging}>

@@ -50,7 +50,7 @@
 
 <nav
   class={show
-    ? 'absolute right-3 shadow-lg rounded-xl bg-gray-600 text-gray-400 p-5 z-10'
+    ? 'absolute right-3 shadow-lg rounded-xl bg-gray-600 text-gray-400 p-5 z-10 top-20'
     : 'hidden'}
   bind:this={navigation}
 >

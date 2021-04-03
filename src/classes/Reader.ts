@@ -1,5 +1,7 @@
+import { get } from 'svelte/store';
 import {
   doc,
+  textElem,
   pageContent,
   canvas,
   pageNum,
@@ -8,10 +10,12 @@ import {
 } from '../store.js';
 import pdfjs from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+import { TextLayerBuilder, EventBus } from 'pdfjs-dist/web/pdf_viewer';
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export default class Reader {
   canvas: any;
+  textElem: any;
   doc: any;
   svg: any;
   pageNum: number;
@@ -27,6 +31,7 @@ export default class Reader {
 
   constructor() {
     this.canvas = null;
+    this.textElem = get(textElem);
     this.doc = null;
     this.svg = null;
     this.pageNum = 1;
@@ -49,6 +54,7 @@ export default class Reader {
   subscribe() {
     doc.subscribe((val) => (this.doc = val));
     canvas.subscribe((val) => (this.canvas = val));
+    textElem.subscribe((val) => (this.textElem = val));
     numPages.subscribe((val) => (this.numPages = val));
     pageNum.subscribe((val) => (this.pageNum = val));
     scale.subscribe((val) => (this.scale = val));
@@ -113,10 +119,14 @@ export default class Reader {
                 tempContentArray.push(item.str);
               });
             }
-            pageContent.update((val) => tempContentArray);
 
-            // console.log(textContent);
-            // textContainer.innerHTML = '';
+            let canvasOffset = this.canvas.getBoundingClientRect();
+            pageContent.update((val) => tempContentArray);
+            this.textElem.innerHTML = '';
+            this.textElem.setAttribute(
+              'style',
+              `left: ${canvasOffset.left}px; top: ${canvasOffset.top}px; height: ${viewport.height}px; width: ${viewport.width}px;`
+            );
             // textContent.items.forEach((item) => {
             //   const itemElement = document.createElement('span');
             //   itemElement.setAttribute('data-height', item.height);
@@ -126,16 +136,16 @@ export default class Reader {
             //     item.transform.toString()
             //   );
             //   itemElement.innerHTML = item.str;
-            //   textContainer.appendChild(itemElement);
+            //   this.textElem.appendChild(itemElement);
             // });
-            // var textLayer = new TextLayerBuilder({
-            //   textLayerDiv: textContainer,
-            //   eventBus: new EventBus(),
-            //   pageIndex: page.pageIndex,
-            //   viewport: viewport,
-            // });
-            // textLayer.setTextContent(textContent);
-            // textLayer.render();
+            var textLayer = new TextLayerBuilder({
+              textLayerDiv: this.textElem,
+              eventBus: new EventBus(),
+              pageIndex: this.pageNum,
+              viewport: viewport,
+            });
+            textLayer.setTextContent(textContent);
+            textLayer.render();
           });
       });
 
@@ -175,7 +185,7 @@ export default class Reader {
   zoomIn() {
     if (this.scale < 2) {
       this.scale += 0.1;
-      scale.update((n) => n + 0.1);
+      scale.update((n) => Number(n) + 0.1);
       this.renderPage(this.pageNum);
     }
   }
@@ -183,7 +193,7 @@ export default class Reader {
   zoomOut() {
     if (this.scale > 0.8) {
       this.scale -= 0.1;
-      scale.update((n) => n - 0.1);
+      scale.update((n) => Number(n) - 0.1);
       this.renderPage(this.pageNum);
     }
   }

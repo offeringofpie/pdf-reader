@@ -1,5 +1,5 @@
 <script>
-  import { doc, canvas, pageContent } from './store.js';
+  import { doc, canvas, textElem, pageContent } from './store.js';
   import { onMount } from 'svelte';
   import Header from './components/Header.svelte';
   import Footer from './components/Footer.svelte';
@@ -23,32 +23,43 @@
 
   onMount(() => {
     canvas.update((val) => canvasElem);
+    textElem.update((val) => textContainer);
     reader.init();
   });
 </script>
 
 <svelte:head>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="theme-color" content="#ffffff" />
   <meta
     name="description"
     content="Web site created using create-snowpack-app"
   />
-  <title>A New Title</title>
+  <title>The Reader</title>
 </svelte:head>
 
 <slot>
   <Header {...reader} />
   <main
-    class="relative mx-auto h-screen pt-20 pb-3 flex justify-center"
+    class="relative mx-auto min-h-screen pt-20 pb-3 flex justify-center"
     on:dragover|preventDefault={startDragging}
     on:dragleave|preventDefault={stopDragging}
     on:drop|preventDefault={stopDragging}
   >
-    <div bind:this={textContainer} class="absolute hidden">{$pageContent}</div>
     <Drop {...reader} className={``} {dragging} />
     <!-- svelte-ignore component-name-lowercase -->
     <canvas
       bind:this={canvasElem}
-      class={`mx-auto shadow-xl relative z-1 ${$doc ? '' : 'hidden'}`}
+      class={`mx-auto shadow-xl relative z-0 ${$doc ? '' : 'hidden'}`}
+    />
+    <div
+      bind:this={textContainer}
+      class="text-container absolute left-0 top-0 right-0 bottom-0 overflow-hidden opacity-20 z-0"
     />
   </main>
   {#if $pageContent}
@@ -56,3 +67,17 @@
   {/if}
   <Sprite />
 </slot>
+
+<style>
+  :global(.text-container) {
+    line-height: 1;
+  }
+
+  :global(.text-container > span) {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+  }
+</style>
