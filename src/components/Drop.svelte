@@ -40,17 +40,19 @@
 </script>
 
 <label
-  class={`absolute h-full w-full mx-3 p-20 text-center transition-all ease-in-out duration-200 border-2 border-dashed border-transparent rounded-xl z-1 ml-0 ${
-    dragging ? 'z-10 border-red-400 opacity-100' : ''
+  class={`absolute top-3 left-3 bottom-3 right-3 p-20 text-center transition-all ease-in-out duration-200 border-4 border-dashed border-transparent rounded-xl z-1 ml-0 ${
+    dragging ? 'z-10 border-purple-600 opacity-100' : ''
   } ${$doc ? 'opacity-0' : 'cursor-pointer'} ${className}`}
   on:drop|preventDefault={onFile(getFilesFromDropEvent)}
 >
-  <slot {dragging}>
-    <div>
-      Drag &amp; Drop your file(s) or
-      <strong>browse.</strong>
-    </div>
-  </slot>
+  <slot {dragging} />
+  <div
+    class="absolute transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20"
+  >
+    <svg width="450" height="450">
+      <use xlink:href="#logo" />
+    </svg>
+  </div>
   <input
     bind:this={inputElement}
     type="file"

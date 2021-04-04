@@ -43,16 +43,16 @@
   <footer class="fixed right-3 bottom-3 inline-flex">
     <Button
       icon={playing ? 'pause' : 'play'}
-      size="10"
-      onclick={speak}
+      size="15"
+      on:click={speak}
       className={`shadow-lg rounded-l-md ${
         playing ? 'bg-gray-700' : 'bg-gray-600'
       } hover:bg-gray-700 p-3 z-10`}
     />
     <Button
       icon="stop"
-      size="10"
-      onclick={stop}
+      size="15"
+      on:click={stop}
       className="shadow-lg rounded-r-md bg-gray-600 hover:bg-gray-700 p-3 z-10"
     />
   </footer>

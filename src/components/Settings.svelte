@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { doc, rate, voice, scale } from '../store';
-  export let show = false;
+  import { doc, rate, voice, scale, settings_show } from '../store';
   export let zoom;
 
   let voiceContainer, navigation;
@@ -14,6 +13,36 @@
       speechSynthesis.onvoiceschanged = populateVoiceList;
     }
   });
+
+  function clickOutside(node) {
+    const handleClick = (event) => {
+      if (
+        node &&
+        !node.contains(event.target) &&
+        !event.defaultPrevented &&
+        event.target.tagName !== 'use' &&
+        event.target.tagName !== 'path' &&
+        event.target.tagName !== 'svg' &&
+        event.target.tagName !== 'button'
+      ) {
+        node.dispatchEvent(new CustomEvent('click_outside', node));
+      }
+    };
+
+    document.addEventListener('click', handleClick, true);
+
+    return {
+      destroy() {
+        document.removeEventListener('click', handleClick, true);
+      },
+    };
+  }
+
+  function handleClickOutside(event) {
+    if ($settings_show) {
+      settings_show.update((val) => !val);
+    }
+  }
 
   function updateRate(ev) {
     rate.set(ev.target.value);
@@ -55,10 +84,12 @@
 </script>
 
 <nav
-  class={show
-    ? 'fixed right-3 shadow-lg rounded-xl bg-gray-600 text-gray-400 p-5 z-10 top-20'
+  class={$settings_show
+    ? 'absolute right-0 shadow-lg rounded-bl-xl bg-gray-600 text-gray-400 p-5 z-10 top-12'
     : 'hidden'}
   bind:this={navigation}
+  use:clickOutside
+  on:click_outside={handleClickOutside}
 >
   <h3 class="text-lg font-semibold uppercase">Options</h3>
 
@@ -95,20 +126,16 @@
   <div class="relative inline-block w-full text-gray-300">
     <!-- svelte-ignore a11y-no-onchange -->
     <select
-      class="w-full h-10 pl-3 pr-6 text-base bg-gray-500 rounded-lg appearance-none focus:shadow-outline shadow-xl border-0"
+      class="cursor-pointer w-full h-10 pl-3 pr-6 text-base bg-gray-500 rounded-lg appearance-none focus:shadow-outline shadow-xl border-0"
       on:change={updateVoice}
       bind:this={voiceContainer}
     />
     <div
       class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
     >
-      <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"
-        ><path
-          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clip-rule="evenodd"
-          fill-rule="evenodd"
-        /></svg
-      >
+      <svg width="20" height="20">
+        <use xlink:href="#dropdown" />
+      </svg>
     </div>
   </div>
 </nav>

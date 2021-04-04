@@ -1,15 +1,24 @@
 <script>
   import { onMount } from 'svelte';
-  import { doc, pageNum, numPages, fileInput } from '../store.js';
+  import {
+    doc,
+    pageNum,
+    numPages,
+    fileInput,
+    settings_show,
+  } from '../store.js';
   import Button from './Button.svelte';
   import Settings from './Settings.svelte';
-  let settings_show = false;
 
   export let prev;
   export let next;
   export let zoom;
   export let zoomIn;
   export let zoomOut;
+
+  function toggleSettings() {
+    settings_show.set(!$settings_show);
+  }
 
   function selectFile() {
     $fileInput.click();
@@ -33,7 +42,7 @@
         selectFile();
         break;
       case 191: // ?
-        settings_show = !settings_show;
+        settings_show.update((val) => !val);
         break;
       default:
         break;
@@ -46,22 +55,25 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <header
-  class="fixed flex top-0 w-screen justify-between items-center flex-row text-center shadow-lg bg-gray-600 text-gray-400 p-5 z-10"
+  class="fixed flex top-0 w-screen justify-between items-center flex-row text-center shadow-lg bg-gray-600 text-gray-400 p-3 z-10"
 >
   <nav>
-    <Button icon="folder" onclick={selectFile} />
+    <Button icon="folder" on:click={selectFile} />
   </nav>
   {#if $doc}
     <div class="flex">
-      <Button icon="chevronLeft" onclick={prev} />
-      {$pageNum} of {$numPages}
-      <Button icon="chevronRight" onclick={next} />
+      <Button icon="chevronLeft" on:click={prev} />
+      <div>{$pageNum} of {$numPages}</div>
+      <Button icon="chevronRight" on:click={next} />
     </div>
   {/if}
 
   <nav class="flex">
-    <Button icon="cog" onclick={() => (settings_show = !settings_show)} />
+    <Button
+      icon="cog"
+      on:click={toggleSettings}
+      className={$settings_show ? 'transform rotate-90' : ''}
+    />
   </nav>
+  <Settings {zoom} />
 </header>
-
-<Settings bind:show={settings_show} {zoom} />

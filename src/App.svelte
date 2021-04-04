@@ -57,16 +57,18 @@
     on:drop|preventDefault={stopDragging}
   >
     <Drop {...reader} className={``} {dragging} />
-    <!-- svelte-ignore component-name-lowercase -->
-    <canvas
-      bind:this={canvasElem}
-      on:touchmove={touchmove}
-      class={`pt-20 mx-auto shadow-xl relative z-0 ${$doc ? '' : 'hidden'}`}
-    />
-    <div
-      bind:this={textContainer}
-      class="text-container absolute left-0 top-20 right-0 bottom-0 overflow-hidden opacity-80 z-0"
-    />
+    <div class="pt-20">
+      <!-- svelte-ignore component-name-lowercase -->
+      <canvas
+        bind:this={canvasElem}
+        on:touchmove={touchmove}
+        class={`mx-auto shadow-xl relative z-0 ${$doc ? '' : 'hidden'}`}
+      />
+      <div
+        bind:this={textContainer}
+        class="text-container absolute left-0 top-0 right-0 bottom-0 overflow-hidden opacity-80 z-0"
+      />
+    </div>
   </main>
   {#if $pageContent}
     <Footer />
