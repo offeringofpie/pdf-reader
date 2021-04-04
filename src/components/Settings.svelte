@@ -1,7 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import { rate, voice } from '../store';
+  import { doc, rate, voice, scale } from '../store';
   export let show = false;
+  export let zoom;
 
   let voiceContainer, navigation;
   let synth = window.speechSynthesis;
@@ -20,6 +21,11 @@
 
   function updateVoice(ev) {
     voice.set(voices[ev.target.value].name);
+  }
+
+  function updateScale(ev) {
+    scale.set(ev.target.value);
+    zoom(ev.target.value);
   }
 
   function populateVoiceList() {
@@ -50,11 +56,28 @@
 
 <nav
   class={show
-    ? 'absolute right-3 shadow-lg rounded-xl bg-gray-600 text-gray-400 p-5 z-10 top-20'
+    ? 'fixed right-3 shadow-lg rounded-xl bg-gray-600 text-gray-400 p-5 z-10 top-20'
     : 'hidden'}
   bind:this={navigation}
 >
-  <h3 class="text-lg font-semibold uppercase">Voice Options</h3>
+  <h3 class="text-lg font-semibold uppercase">Options</h3>
+
+  {#if $doc}
+    <h4>General</h4>
+    <label>
+      <span>Scale <small>({Math.round($scale * 10) / 10})</small></span>
+      <input
+        type="range"
+        name="scale"
+        min="1"
+        max="3"
+        value={$scale}
+        step="0.1"
+        on:change={updateScale}
+      />
+    </label>
+  {/if}
+  <h4>Voice</h4>
   <div>
     <label>
       <span>Rate <small>({$rate})</small></span>

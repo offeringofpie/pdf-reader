@@ -7,6 +7,7 @@
 
   export let prev;
   export let next;
+  export let zoom;
   export let zoomIn;
   export let zoomOut;
 
@@ -45,7 +46,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <header
-  class="fixed flex top-0 w-full justify-between items-center flex-row text-center shadow-lg bg-gray-600 text-gray-400 p-5 z-10"
+  class="fixed flex top-0 w-screen justify-between items-center flex-row text-center shadow-lg bg-gray-600 text-gray-400 p-5 z-10"
 >
   <nav>
     <Button icon="folder" onclick={selectFile} />
@@ -59,13 +60,8 @@
   {/if}
 
   <nav class="flex">
-    {#if $doc}
-      <Button icon="minus" onclick={zoomOut} />
-      <Button icon="plus" onclick={zoomIn} />
-    {/if}
-
     <Button icon="cog" onclick={() => (settings_show = !settings_show)} />
   </nav>
 </header>
 
-<Settings bind:show={settings_show} />
+<Settings bind:show={settings_show} {zoom} />

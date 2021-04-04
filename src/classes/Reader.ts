@@ -45,6 +45,7 @@ export default class Reader {
     this.next = this.onNextPage.bind(this);
     this.prev = this.onPrevPage.bind(this);
     this.open = this.openFile.bind(this);
+    this.zoom = this.zoom.bind(this);
     this.zoomIn = this.zoomIn.bind(this);
     this.zoomOut = this.zoomOut.bind(this);
   }
@@ -165,19 +166,25 @@ export default class Reader {
     this.queueRenderPage(this.pageNum);
   }
 
+  zoom(val) {
+    this.scale = val;
+    scale.set(val);
+    this.queueRenderPage(this.pageNum);
+  }
+
   zoomIn() {
-    if (this.scale < 2) {
+    if (this.scale <= 3) {
       this.scale += 0.1;
       scale.update((n) => Number(n) + 0.1);
-      this.renderPage(this.pageNum);
+      this.queueRenderPage(this.pageNum);
     }
   }
 
   zoomOut() {
-    if (this.scale > 0.8) {
+    if (this.scale >= 1) {
       this.scale -= 0.1;
       scale.update((n) => Number(n) - 0.1);
-      this.renderPage(this.pageNum);
+      this.queueRenderPage(this.pageNum);
     }
   }
 
