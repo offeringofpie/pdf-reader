@@ -36,7 +36,7 @@ module.exports = {
   buildOptions: {},
   alias: {},
   optimize: {
-    bundle: false,
+    bundle: true,
     treeshake: true,
     minify: true,
     manifest: true,
