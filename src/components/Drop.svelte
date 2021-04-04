@@ -40,7 +40,7 @@
 </script>
 
 <label
-  class={`absolute top-3 left-3 bottom-3 right-3 p-20 text-center transition-all ease-in-out duration-200 border-4 border-dashed border-transparent rounded-xl z-1 ml-0 ${
+  class={`absolute top-20 left-6 bottom-6 right-6 text-center transition-all ease-in-out duration-200 border-4 border-dashed border-transparent rounded-xl z-1 ml-0 ${
     dragging ? 'z-10 border-purple-600 opacity-100' : ''
   } ${$doc ? 'opacity-0' : 'cursor-pointer'} ${className}`}
   on:drop|preventDefault={onFile(getFilesFromDropEvent)}
