@@ -46,7 +46,7 @@
 <slot>
   <Header {...reader} />
   <main
-    class="relative mx-auto min-h-screen pt-20 pb-3 flex justify-center"
+    class="relative mx-auto min-h-screen pt-20 pb-3"
     on:dragover|preventDefault={startDragging}
     on:dragleave|preventDefault={stopDragging}
     on:drop|preventDefault={stopDragging}
@@ -59,7 +59,7 @@
     />
     <div
       bind:this={textContainer}
-      class="text-container absolute left-0 top-0 right-0 bottom-0 overflow-hidden opacity-20 z-0"
+      class="text-container absolute left-0 top-0 right-0 bottom-0 overflow-hidden opacity-80 z-0"
     />
   </main>
   {#if $pageContent}

@@ -112,7 +112,9 @@ export default class Reader {
           .then((textContent) => {
             let canvasOffset = this.canvas.getBoundingClientRect();
             pageContent.update((val) =>
-              textContent.items.length ? textContent : null
+              textContent.items.length
+                ? textContent.items.map((item) => item.str)
+                : null
             );
             this.textElem.innerHTML = '';
             this.textElem.setAttribute(
