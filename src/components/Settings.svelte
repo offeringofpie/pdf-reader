@@ -104,6 +104,9 @@
         max="3"
         value={$scale}
         step="0.1"
+        aria-valuemin="1"
+        aria-valuemax="3"
+        aria-valuenow={$scale}
         on:change={updateScale}
       />
     </label>
@@ -119,6 +122,9 @@
         max="3"
         value={$rate}
         step="0.1"
+        aria-valuemin="0.5"
+        aria-valuemax="3"
+        aria-valuenow={$rate}
         on:change={updateRate}
       />
     </label>
@@ -127,6 +133,7 @@
     <!-- svelte-ignore a11y-no-onchange -->
     <select
       class="cursor-pointer w-full h-10 pl-3 pr-6 text-base bg-gray-500 rounded-lg appearance-none focus:shadow-outline shadow-xl border-0"
+      aria-label="Voice Selection"
       on:change={updateVoice}
       bind:this={voiceContainer}
     />

@@ -49,7 +49,7 @@
   <div
     class="absolute transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20"
   >
-    <svg width="450" height="450">
+    <svg width="450" height="450" class="max-w-full">
       <use xlink:href="#logo" />
     </svg>
   </div>

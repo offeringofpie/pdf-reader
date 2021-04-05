@@ -44,6 +44,7 @@
     <Button
       icon={playing ? 'pause' : 'play'}
       size="15"
+      label={playing ? 'Pause' : 'Play'}
       on:click={speak}
       className={`shadow-lg rounded-l-md ${
         playing ? 'bg-gray-700' : 'bg-gray-600'
@@ -52,6 +53,7 @@
     <Button
       icon="stop"
       size="15"
+      label="Stop"
       on:click={stop}
       className="shadow-lg rounded-r-md bg-gray-600 hover:bg-gray-700 p-3 z-10"
     />
