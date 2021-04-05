@@ -51,6 +51,11 @@ export default class Reader {
     this.goToPage = this.goToPage.bind(this);
   }
 
+  /**
+   * sets up stored variable subscription
+   *
+   * @return  {Void}
+   */
   subscribe() {
     doc.subscribe((val) => (this.doc = val));
     canvas.subscribe((val) => (this.canvas = val));
@@ -60,10 +65,22 @@ export default class Reader {
     scale.subscribe((val) => (this.scale = val));
   }
 
+  /**
+   * initial commands
+   *
+   * @return  {Void}
+   */
   init() {
     this.subscribe();
   }
 
+  /**
+   * PDF file opening logic
+   *
+   * @param   {blob}  file  file valriable in blob format
+   *
+   * @return  {Void}
+   */
   openFile(file) {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
@@ -81,6 +98,13 @@ export default class Reader {
     };
   }
 
+  /**
+   * Page rendering logic
+   *
+   * @param   {Integer}  num  valid page number
+   *
+   * @return  {Void}
+   */
   renderPage(num) {
     if (this.doc) {
       this.pageRendering = true;
@@ -131,10 +155,22 @@ export default class Reader {
     }
   }
 
+  /**
+   * returns number of pages
+   *
+   * @return  {Integer}  number of pages
+   */
   getNumPages() {
     return this.numPages;
   }
 
+  /**
+   * queueing logic for page rendering
+   *
+   * @param   {Integer}  num  page number
+   *
+   * @return  {Void}
+   */
   queueRenderPage(num) {
     if (this.pageRendering) {
       this.pageNumPending = num;
@@ -144,6 +180,13 @@ export default class Reader {
     }
   }
 
+  /**
+   * Go to a specific page number
+   *
+   * @param   {Event}  ev   form submit event
+   *
+   * @return  {Void}
+   */
   goToPage(ev) {
     let num = ev.target[0].value;
     if (num < 1) {
@@ -156,6 +199,11 @@ export default class Reader {
     this.queueRenderPage(this.pageNum);
   }
 
+  /**
+   * Goes to previous page
+   *
+   * @return  {Void}
+   */
   onPrevPage() {
     if (this.pageNum <= 1) {
       return;
@@ -164,6 +212,11 @@ export default class Reader {
     this.queueRenderPage(this.pageNum);
   }
 
+  /**
+   * Goes to next page
+   *
+   * @return  {Void}
+   */
   onNextPage() {
     if (this.pageNum >= this.doc.numPages) {
       return;
@@ -172,12 +225,24 @@ export default class Reader {
     this.queueRenderPage(this.pageNum);
   }
 
+  /**
+   * sets scale to a specific value
+   *
+   * @param   {Double}  val   scale value
+   *
+   * @return  {Void}
+   */
   zoom(val) {
     this.scale = val;
     scale.set(val);
     this.queueRenderPage(this.pageNum);
   }
 
+  /**
+   * sets scale to next step
+   *
+   * @return  {Void}
+   */
   zoomIn() {
     if (this.scale <= 3) {
       this.scale += 0.1;
@@ -186,6 +251,11 @@ export default class Reader {
     }
   }
 
+  /**
+   * sets scale to previous step
+   *
+   * @return  {Void}
+   */
   zoomOut() {
     if (this.scale >= 1) {
       this.scale -= 0.1;
