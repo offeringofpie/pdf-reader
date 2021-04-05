@@ -15,6 +15,7 @@
   export let zoom;
   export let zoomIn;
   export let zoomOut;
+  export let goToPage;
 
   function toggleSettings() {
     settings_show.set(!$settings_show);
@@ -58,19 +59,30 @@
   class="fixed flex top-0 w-screen justify-between items-center flex-row text-center shadow-lg bg-gray-600 text-gray-400 p-3 z-10"
 >
   <nav>
-    <Button icon="folder" on:click={selectFile} />
+    <Button icon="folder" on:click={selectFile} label="Open" />
   </nav>
   {#if $doc}
     <div class="flex">
-      <Button icon="chevronLeft" on:click={prev} />
-      <div>{$pageNum} of {$numPages}</div>
-      <Button icon="chevronRight" on:click={next} />
+      <Button icon="chevronLeft" on:click={prev} label="Previous page" />
+      <div>
+        <form on:submit|preventDefault={goToPage}>
+          <input
+            type="number"
+            value={$pageNum}
+            placeholder="1"
+            class="bg-gray-600 text-gray-400 hover:bg-gray-700 focus:bg-gray-700 border-b-2 border-gray-400 focus:border-gray-200 text-center inline w-8 transition-all ease-in-out duration-200"
+          />
+          <span>of {$numPages}</span>
+        </form>
+      </div>
+      <Button icon="chevronRight" on:click={next} label="Next page" />
     </div>
   {/if}
 
   <nav class="flex">
     <Button
       icon="cog"
+      label="Settings"
       on:click={toggleSettings}
       className={$settings_show ? 'transform rotate-90' : ''}
     />

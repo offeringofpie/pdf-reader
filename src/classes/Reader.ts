@@ -48,6 +48,7 @@ export default class Reader {
     this.zoom = this.zoom.bind(this);
     this.zoomIn = this.zoomIn.bind(this);
     this.zoomOut = this.zoomOut.bind(this);
+    this.goToPage = this.goToPage.bind(this);
   }
 
   subscribe() {
@@ -86,13 +87,6 @@ export default class Reader {
 
       this.doc.getPage(num).then((page) => {
         let viewport = page.getViewport({ scale: this.scale });
-        // page.getTextContent().then(function (textContent) {
-        //   // building SVG and adding that to the DOM
-        //   const svg = buildSVG(viewport, textContent);
-        //   console.log(svg);
-        //   this.svg = svg;
-        //   container.appendChild(svg);
-        // });
         this.canvas.height = viewport.height;
         this.canvas.width = viewport.width;
         this.ctx = this.canvas.getContext('2d');
@@ -150,6 +144,18 @@ export default class Reader {
     }
   }
 
+  goToPage(ev) {
+    let num = ev.target[0].value;
+    if (num < 1) {
+      this.pageNum = 1;
+    } else if (num > this.doc.numPages) {
+      this.pageNum = this.doc.numPages;
+    } else {
+      this.pageNum = parseInt(num);
+    }
+    this.queueRenderPage(this.pageNum);
+  }
+
   onPrevPage() {
     if (this.pageNum <= 1) {
       return;
@@ -187,36 +193,4 @@ export default class Reader {
       this.queueRenderPage(this.pageNum);
     }
   }
-
-  // function buildSVG(viewport, textContent) {
-  //   // Building SVG with size of the viewport (for simplicity)
-  //   const svg = document.createElementNS(
-  //     'http://www.w3.org/2000/svg',
-  //     'svg:svg'
-  //   );
-  //   svg.setAttribute('width', viewport.width + 'px');
-  //   svg.setAttribute('height', viewport.height + 'px');
-  //   // items are transformed to have 1px font size
-  //   svg.setAttribute('font-size', 1);
-
-  //   // processing all items
-  //   textContent.items.forEach(function (textItem) {
-  //     // we have to take in account viewport transform, which includes scale,
-  //     // rotation and Y-axis flip, and not forgetting to flip text.
-  //     const tx = pdfjs.Util.transform(
-  //       pdfjs.Util.transform(viewport.transform, textItem.transform),
-  //       [1, 0, 0, -1, 0, 0]
-  //     );
-  //     const style = textContent.styles[textItem.fontName];
-  //     // adding text element
-  //     const text = document.createElementNS(
-  //       'http://www.w3.org/2000/svg',
-  //       'svg:text'
-  //     );
-  //     text.setAttribute('transform', 'matrix(' + tx.join(' ') + ')');
-  //     text.textContent = textItem.str;
-  //     svg.appendChild(text);
-  //   });
-  //   return svg;
-  // }
 }
