@@ -14,34 +14,34 @@
     "serve": "sirv build -p 3000"
   },
   "dependencies": {
-    "pdfjs-dist": "^2.6.347",
-    "svelte": "^3.30.0",
-    "tailwindcss": "^2.0.1"
+    "pdfjs-dist": "^2.7.570",
+    "svelte": "^3.37.0",
+    "tailwindcss": "^2.1.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-env": "^7.13.15",
     "@babel/preset-typescript": "^7.13.0",
     "@martinse/svelte-heroicons": "^0.1.4",
-    "@snowpack/app-scripts-svelte": "^2.0.0",
-    "@snowpack/plugin-babel": "^2.1.6",
+    "@snowpack/app-scripts-svelte": "^2.0.1",
+    "@snowpack/plugin-babel": "^2.1.7",
     "@snowpack/plugin-build-script": "^2.1.0",
-    "@snowpack/plugin-dotenv": "^2.0.4",
-    "@snowpack/plugin-postcss": "^1.2.1",
-    "@snowpack/plugin-svelte": "^3.3.0",
+    "@snowpack/plugin-dotenv": "^2.1.0",
+    "@snowpack/plugin-postcss": "^1.2.2",
+    "@snowpack/plugin-svelte": "^3.6.1",
     "@snowpack/plugin-webpack": "^2.3.1",
-    "@snowpack/web-test-runner-plugin": "^0.2.1",
-    "autoprefixer": "^10.0.4",
-    "postcss": "^8.2.8",
+    "@snowpack/web-test-runner-plugin": "^0.2.2",
+    "autoprefixer": "^10.2.5",
+    "postcss": "^8.2.9",
     "postcss-cli": "^8.3.1",
     "postcss-load-config": "^3.0.1",
     "postcss-nested": "^5.0.5",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.2.1",
-    "prettier-plugin-svelte": "^2.1.4",
+    "prettier-plugin-svelte": "^2.2.0",
     "sirv-cli": "^1.0.11",
-    "snowpack": "^3.0.11",
-    "svelte-preprocess": "^4.1.1",
-    "typescript": "^4.2.3"
+    "snowpack": "^3.2.2",
+    "svelte-preprocess": "^4.7.0",
+    "typescript": "^4.2.4"
   },
   "babel": {
     "presets": [
